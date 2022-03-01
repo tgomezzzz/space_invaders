@@ -18,13 +18,14 @@ def spaceInvaders():
     if player_won:
         end = Text(Point(win.getWidth() / 2, win.getHeight() / 2),  "Thanks for playing Space Invaders!")
         end.setSize(36)
-        end.setColor("light green")
+        end.setTextColor("light green")
         end.draw(win)
 
         score = Text(Point(win.getWidth() / 2,  40 + win.getHeight() / 2), "Score: " + player.getScore())
         score.setSize(30)
         score.draw(win)
-        score.setColor("white")
+        score.setTextColor("white")
+
         win.getMouse()
     
     levels_file.close()

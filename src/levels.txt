@@ -16,3 +16,15 @@ g g b b g g b
 o o g b g b g g
 o o o o
 g g g g b b b b
+$
+g g g g g g g g
+g g g g g g g g
+g g g g g g g g
+g g g g g g g g
+g g g g g g g g
+$
+g g g g g g g g g g
+g g g g g g g g
+b b b b b b b b b b
+o o o o o o o o
+o o o o o o o o o o

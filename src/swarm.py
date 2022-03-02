@@ -1,7 +1,7 @@
 from alien import *
 from random import randint
 
-PADDING = 250
+PADDING = 200
 ALIEN_WIDTH = 67
 
 LEFT_OFFSET = 48

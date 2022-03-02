@@ -67,6 +67,6 @@ class OrangeAlien(Alien):
     def shoot(self):
         anchor = self.img.getAnchor()
         x, y = self.pos()
-        b1 = Bullet(x, y, 4, 10, 0, 6, "orange", self.win)
-        b2 = Bullet(x, y + 24, 4, 10, 0, 6, "orange", self.win)
+        b1 = Bullet(x, y, 4, 10, 0, 12, "orange", self.win)
+        b2 = Bullet(x, y + 24, 4, 10, 0, 12, "orange", self.win)
         return [b1, b2]

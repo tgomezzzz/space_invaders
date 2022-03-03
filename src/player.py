@@ -6,6 +6,7 @@ from shield import *
 PLAYER_PATH = "../images/player.png"
 DEATH_PATH = "../images/explosion.png"
 GROUND = 50
+POWERUP_KILLS = 4
 
 class Player(Entity):
     def __init__(self, win):
@@ -21,11 +22,14 @@ class Player(Entity):
         self.score_text.setSize(15)
         self.score_text.setTextColor("black")
         self.score_text.draw(self.win)
+        self.powerup = ["", 0]
+        self.ability = None
 
     def moveLeft(self):
         if self.left() - self.speed < 0:
             return
         self.moveShield(-self.speed)
+        self.moveAbility(-self.speed)
         self.score_text.move(-self.speed, 0)
         super().move(-self.speed, 0)
         self.img.move(-self.speed, 0)
@@ -34,6 +38,7 @@ class Player(Entity):
         if self.right() + self.speed > self.win.getWidth():
             return
         self.moveShield(self.speed)
+        self.moveAbility(self.speed)
         self.score_text.move(self.speed, 0)
         super().move(self.speed, 0)
         self.img.move(self.speed, 0)
@@ -41,6 +46,10 @@ class Player(Entity):
     def moveShield(self, d_x):
         if self.hasShield():
             self.shield.move(d_x, 0)
+
+    def moveAbility(self, d_x):
+        if self.hasAbility():
+            self.ability.moveWithPlayer(d_x)
 
     def hasShield(self):
         return not self.shield == None
@@ -54,7 +63,29 @@ class Player(Entity):
         anchor = self.img.getAnchor()
         x = anchor.getX()
         y = anchor.getY() - self.img.getHeight() / 2
-        return Bullet(x, y, 4, 10, 0, -7, "white", self.win)
+        return Bullet(x, y, 4, 10, 0, -4, "white", self.win)
+
+    def doPowerup(self, alien):
+        if alien == self.powerup[0]:
+            self.powerup[1] += 1
+            if self.powerup[1] >= POWERUP_KILLS - 1:
+                self.setAbility(alien)
+        else:
+            self.powerup = [alien, 0]
+
+    def setAbility(self, alien):
+        if alien == "b":
+            self.ability = VerticalBurst(self.cX(), self.top(), self.win)
+
+    def useAbility(self):
+        self.ability.draw()
+        ret = self.ability
+        self.ability = None
+        self.powerup = ["", 0]
+        return ret
+
+    def hasAbility(self):
+        return not self.ability == None
 
     def addScore(self, inc):
         self.score += inc

@@ -7,6 +7,10 @@ GREEN_ALIEN_PATH = "../images/green_alien.png"
 ORANGE_ALIEN_PATH = "../images/orange_alien.png"
 DEATH_PATH = "../images/explosion.png"
 
+BLUE_ID = "b"
+GREEN_ID = "g"
+ORANGE_ID = "o"
+
 class Alien(Entity):
     def __init__(self, img_path, x, y, win):
         self.img = Image(Point(x, y), img_path)
@@ -46,7 +50,10 @@ class BlueAlien(Alien):
         super().__init__(BLUE_ALIEN_PATH, x, y, win)
 
     def deathAttack(self):
-        return Bullet(self.cX(), self.cY(), 12, 12, 0, 10, "light blue", self.win)
+        return Bullet(self.cX(), self.cY(), 12, 12, 0, 5, "light blue", self.win)
+
+    def id(self):
+        return BLUE_ID
 
 class GreenAlien(Alien):
     def __init__(self, x, y, win):
@@ -54,11 +61,14 @@ class GreenAlien(Alien):
 
     def shoot(self):
         x, y = self.pos()
-        y_dir = randint(4, 8)
+        y_dir = randint(2, 4)
         b_left = Bullet(x, y, 4, 10, randint(-3, -1), y_dir, "green", self.win)
         b_down = Bullet(x, y, 4, 10, 0, y_dir, "green", self.win)
         b_right = Bullet(x, y, 4, 10, randint(1, 3), y_dir, "green", self.win)
         return [b_left, b_down, b_right]
+
+    def id(self):
+        return GREEN_ID
 
 class OrangeAlien(Alien):
     def __init__(self, x, y, win):
@@ -67,6 +77,9 @@ class OrangeAlien(Alien):
     def shoot(self):
         anchor = self.img.getAnchor()
         x, y = self.pos()
-        b1 = Bullet(x, y, 4, 10, 0, 12, "orange", self.win)
-        b2 = Bullet(x, y + 24, 4, 10, 0, 12, "orange", self.win)
+        b1 = Bullet(x, y, 4, 10, 0, 6, "orange", self.win)
+        b2 = Bullet(x, y + 24, 4, 10, 0, 6, "orange", self.win)
         return [b1, b2]
+
+    def id(self):
+        return ORANGE_ID

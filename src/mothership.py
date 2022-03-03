@@ -11,10 +11,10 @@ class Mothership(Entity):
     def __init__(self, side, win):
         if side == 0:
             self.x = -WIDTH
-            self.speed = 5
+            self.speed = 2
         else:
             self.x = win.getWidth() + WIDTH
-            self.speed = -5
+            self.speed = -2
         self.img = Image(Point(self.x, Y_POS), MOTHERSHIP_PATH)
         super().__init__(self.x - self.img.getWidth() / 2, Y_POS - self.img.getHeight() / 2, self.img.getWidth(), self.img.getHeight(), win)
         self.img.draw(self.win)

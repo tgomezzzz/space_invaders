@@ -26,10 +26,33 @@ class Bullet(Entity):
 
 class ShieldBullet(Bullet):
     def __init__(self, x, ground, win):
-        super().__init__(x, Y_POS, 8, 8, 0, 5, "red", win)
+        super().__init__(x, Y_POS, 8, 8, 0, 3, "red", win)
         self.ground = ground
 
     def move(self):
         if self.bottom() >= self.ground:
             return
         super().move()
+
+class VerticalBurst(Bullet):
+    def __init__(self, x, y, win):
+        super().__init__(x, y, 8, 20, 0, -5, "cyan", win)
+        self.rect.undraw()
+
+    def move(self):
+        if self.bottom() < 0:
+            self.killTop()
+        super().move()
+
+    def moveWithPlayer(self, d_x):
+        self.rect.move(d_x, 0)
+        Entity.move(self, d_x, 0)
+
+    def draw(self):
+        self.rect.draw(self.win)
+
+    def kill(self):
+        pass
+
+    def killTop(self):
+        super().kill()

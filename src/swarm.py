@@ -15,7 +15,7 @@ class Swarm:
 
         self.descend = False
         self.dir = 1
-        self.speed = 1
+        self.speed = 0.5
         self.remaining_descent = 0
         self.bullet_chance = 1
         self.left = self.leftmost()
@@ -108,7 +108,7 @@ class Swarm:
         return len(collisions) > 0, collisions
 
     def intensify(self, strength):
-        self.speed += 0.5 * strength
+        self.speed += 0.15 * strength
         self.remaining -= strength
         self.bullet_chance += 0.05 * (self.size - self.remaining)
         if self.remaining < self.size / 5:

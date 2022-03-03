@@ -39,10 +39,14 @@ class Level:
                 bullet = self.player.shoot()
                 if bullet != None:
                     self.player_bullets.append(bullet)
+            elif key == "Return":
+                if self.player.hasAbility():
+                    self.player_bullets.append(self.player.useAbility())
+                    
 
             self.finished, self.player_won = self.checkAllCollisions()
 
-            update(30)
+            update(60)
 
         if not self.player_won:    
             self.win_message.setText("Better luck next time!")
@@ -149,6 +153,7 @@ class Level:
                     death_attack = collision.deathAttack()
                     if not death_attack == None:
                         self.alien_bullets.append(death_attack)
+                    self.player.doPowerup(collision.id())
                 self.swarm.intensify(len(collisions))
         return self.swarm.isDead()
 

@@ -34,9 +34,9 @@ class ShieldBullet(Bullet):
             return
         super().move()
 
-class VerticalBurst(Bullet):
-    def __init__(self, x, y, win):
-        super().__init__(x, y, 8, 20, 0, -5, "cyan", win)
+class Powerup(Bullet):
+    def __init__(self, x, y, w, h, x_dir, y_dir, color, win):
+        super().__init__(x, y, w, h, x_dir, y_dir, color, win)
         self.rect.undraw()
 
     def move(self):
@@ -56,3 +56,37 @@ class VerticalBurst(Bullet):
 
     def killTop(self):
         super().kill()
+
+class VerticalBurst(Powerup):
+    def __init__(self, x, y, win):
+        super().__init__(x, y, 8, 20, 0, -5, "cyan", win)
+
+class HorizontalBurst(Powerup):
+    def __init__(self, x, y, x_dir, y_dir, do_burst, win):
+        super().__init__(x, y, 8, 8, x_dir, y_dir, "light green", win)
+        self.do_burst = do_burst
+        if not do_burst:
+            self.rect.draw(self.win)
+
+    def move(self):
+        if self.do_burst:
+            if self.bottom() < 0:
+                self.killTop()
+        else:
+            self.killSides()
+        super().move()
+
+    def kill(self):
+        if self.do_burst:
+            print("killing first bullet")
+            x = self.cX()
+            y = self.top() - 10
+            Bullet.kill(self)
+            left = HorizontalBurst(x, y, -4, 0, False, self.win)
+            right = HorizontalBurst(x, y, 4, 0, False, self.win)
+            return [left, right]
+    
+    def killSides(self):
+        if self.right() < 0 or self.left() > self.win.getWidth():
+            super().kill()
+

@@ -124,7 +124,7 @@ class Level:
             if self.hasMothership():
                 if bullet.isColliding(self.mothership):
                     self.mothership.kill()
-                    bullet.kill()
+                    self.checkNewBullets(bullet.kill())
                     self.shield_bullets.append(self.mothership.spawnShieldBullet(self.player.bottom()))
                     self.player.addScore(200)
 
@@ -132,7 +132,7 @@ class Level:
                 if alien_bullet.isDead():
                     continue
                 if bullet.isColliding(alien_bullet):
-                    bullet.kill()
+                    self.checkNewBullets(bullet.kill())
                     alien_bullet.kill()
                     self.player.addScore(50)
 
@@ -140,7 +140,7 @@ class Level:
                 if shield_bullet.isDead():
                     continue
                 if shield_bullet.isColliding(bullet):
-                    bullet.kill()
+                    self.checkNewBullets(bullet.kill())
                     shield_bullet.kill()
                     self.player.setShield()
 
@@ -149,13 +149,18 @@ class Level:
                 for collision in collisions:
                     self.player.addScore(100)
                     collision.kill()
-                    bullet.kill()
+                    self.checkNewBullets(bullet.kill())
                     death_attack = collision.deathAttack()
                     if not death_attack == None:
                         self.alien_bullets.append(death_attack)
                     self.player.doPowerup(collision.id())
                 self.swarm.intensify(len(collisions))
         return self.swarm.isDead()
+
+    def checkNewBullets(self, bullets):
+        if bullets == None:
+            return
+        self.player_bullets += bullets
 
     def endLevel(self):
         self.swarm.clear()

@@ -33,7 +33,7 @@ class Alien(Entity):
 
     def shoot(self):
         x, y = self.pos()
-        b = Bullet(x, y, 4, 10, 0, 4, "blue", self.win)
+        b = Bullet(x, y, 4, 10, 0, 4, "light blue", self.win)
         return [b]
 
     def kill(self):
@@ -62,9 +62,9 @@ class GreenAlien(Alien):
     def shoot(self):
         x, y = self.pos()
         y_dir = randint(2, 4)
-        b_left = Bullet(x, y, 4, 10, randint(-3, -1), y_dir, "green", self.win)
-        b_down = Bullet(x, y, 4, 10, 0, y_dir, "green", self.win)
-        b_right = Bullet(x, y, 4, 10, randint(1, 3), y_dir, "green", self.win)
+        b_left = Bullet(x, y, 4, 6, randint(-3, -1), y_dir, "light green", self.win)
+        b_down = Bullet(x, y, 4, 6, 0, y_dir, "light green", self.win)
+        b_right = Bullet(x, y, 4, 6, randint(1, 3), y_dir, "light green", self.win)
         return [b_left, b_down, b_right]
 
     def id(self):

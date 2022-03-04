@@ -5,12 +5,13 @@ from alien import *
 from player import *
 
 class Level:
-    def __init__(self, level_str, player, win):
+    def __init__(self, level_str, player, ser, win):
         self.win = win
         if player == None:
             self.player = Player(self.win)
         else:
             self.player = player
+        self.ser = ser
         self.swarm = Swarm(level_str, self.win)
         self.alien_bullets = []
         self.player_bullets = []
@@ -19,7 +20,7 @@ class Level:
         self.player_won = False
         self.win_message = Text(Point(self.win.getWidth() / 2, self.win.getHeight() / 2),  "Level cleared!")
         self.score = Text(Point(self.win.getWidth() / 2, 70 + self.win.getHeight() / 2), "")
-        self.end_message = Text(Point(self.win.getWidth() / 2, 40 + self.win.getHeight() / 2),  "Click to continue.")
+        self.end_message = Text(Point(self.win.getWidth() / 2, 40 + self.win.getHeight() / 2),  "Press enter to continue.")
         self.mothership = None
 
     def run(self):
@@ -31,16 +32,22 @@ class Level:
             self.alien_bullets += self.swarm.shoot()
 
             key = self.win.checkKey()
-            if key == "Left":
+            serial_data = self.ser.readLine()
+            # print(serial_data)
+            serial_data = 3000
+            if key == "Left" or serial_data < 2010:
+                print("moving left")
                 self.player.moveLeft()
-            elif key == "Right":
+            elif key == "Right" or serial_data > 4000:
                 self.player.moveRight()
+                print("moving right")
             elif key == "space":
                 bullet = self.player.shoot()
                 if bullet != None:
                     self.player_bullets.append(bullet)
             elif key == "Return":
                 if self.player.hasAbility():
+                    self.player.addScore(200)
                     self.player_bullets.append(self.player.useAbility())
                     
 
@@ -51,7 +58,7 @@ class Level:
         if not self.player_won:    
             self.win_message.setText("Better luck next time!")
             self.score.setText("Score: " + self.player.getScore())
-            self.end_message.setText("Click to exit.")
+            self.end_message.setText("Press q to exit, or Enter to try again.")
 
         self.win_message.setSize(36)
         self.win_message.setTextColor("light green")
@@ -62,9 +69,14 @@ class Level:
         self.end_message.setSize(20)
         self.end_message.setTextColor("white")
         self.end_message.draw(self.win)
-        self.win.getMouse()
+        key = self.win.getKey()
+        while key != "q" and key != "Return":
+            key = self.win.getKey()
         self.endLevel()
-        return self.player_won, self.player
+        return self.player_won, self.player, key
+    
+    def getPlayer(self):
+        return self.player
 
     def moveBullets(self):
         for bullet in self.alien_bullets:
@@ -84,7 +96,7 @@ class Level:
                 return
             self.mothership.move()
         else:
-            if randint(0, 500) < 1:
+            if randint(0, 1000) < 1:
                 self.mothership = Mothership(randint(0, 1), self.win)
 
     def checkAllCollisions(self):

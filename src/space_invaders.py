@@ -1,17 +1,25 @@
 from graphics import *
 from level import *
+from serial_reader import *
+
+PORT = '/dev/cu.wchusbserial533C0037561'
+BAUD = 115200
+DATA = 'ascii'
 
 def spaceInvaders():
     win = GraphWin("Space Invaders", 1200, 700, autoflush=False)
     win.setBackground("black")
 
+    ser = SerialReader(PORT, BAUD, DATA)
+
     levels_file = open("levels.txt", "r")
 
     player_won = False
     player = None
+    key = ""
     for level_str in levels_file.read().strip().split('$'):
-        level = Level(level_str, player, win)
-        player_won, player = level.run()
+        level = Level(level_str, player, ser, win)
+        player_won, player, key = level.run()
         if not player_won:
             break
 
@@ -26,9 +34,15 @@ def spaceInvaders():
         score.draw(win)
         score.setTextColor("white")
 
-        win.getMouse()
-    
-    levels_file.close()
-    win.close()
+        win.getKey()
+
+    if key == "q":
+        levels_file.close()
+        win.close()
+    elif key == "Return":
+        levels_file.close()
+        win.close()
+        spaceInvaders()
+        ser.kill()
 
 spaceInvaders()  

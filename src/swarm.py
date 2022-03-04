@@ -93,7 +93,7 @@ class Swarm:
         for row in self.swarm:
             for alien in row:
                 if not alien.isDead():
-                    if randint(0, 1000) < self.bullet_chance:
+                    if randint(0, 1700) < self.bullet_chance:
                         new_bullets += alien.shoot()
         return new_bullets
 

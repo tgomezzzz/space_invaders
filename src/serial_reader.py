@@ -2,7 +2,17 @@
 
 import serial
 
-ser = serial.Serial('/dev/cu.wchusbserial533C0037561', 115200)
+class SerialReader:
+	def __init__(self, port, baud, data):
+		self.port = port
+		self.baud = baud
+		self.data = data
+		self.ser = serial.Serial(port, baud)
 
-while(True):
-  print(str(ser.readline().strip(), 'ascii'))
+	def readLine(self):
+		try:
+			line = str(self.ser.readline().strip(), self.data)
+			args = line.split(',')
+			return int(args[1])
+		except:
+			return -1

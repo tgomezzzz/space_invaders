@@ -87,10 +87,14 @@ class Player(Entity):
             self.addIndicator(alien)
 
     def setAbility(self, alien):
+        if self.hasAbility():
+            return
         if alien == "b":
             self.ability = VerticalBurst(self.cX(), self.top(), self.win)
         elif alien == "g":
             self.ability = HorizontalBurst(self.cX(), self.top(), 0, -4, True, self.win)
+        elif alien == "o":
+            self.ability = BombBurst(self.cX(), self.top(), 10, 10, 0, -4, True, self.win)
 
     def useAbility(self):
         self.ability.draw()

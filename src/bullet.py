@@ -65,7 +65,7 @@ class HorizontalBurst(Powerup):
     def __init__(self, x, y, x_dir, y_dir, do_burst, win):
         super().__init__(x, y, 8, 8, x_dir, y_dir, "light green", win)
         self.do_burst = do_burst
-        if not do_burst:
+        if not self.do_burst:
             self.rect.draw(self.win)
 
     def move(self):
@@ -78,7 +78,6 @@ class HorizontalBurst(Powerup):
 
     def kill(self):
         if self.do_burst:
-            print("killing first bullet")
             x = self.cX()
             y = self.top() - 10
             Bullet.kill(self)
@@ -89,4 +88,39 @@ class HorizontalBurst(Powerup):
     def killSides(self):
         if self.right() < 0 or self.left() > self.win.getWidth():
             super().kill()
+
+class BombBurst(Powerup):
+    def __init__(self, x, y, w, h, x_dir, y_dir, do_burst, win):
+        super().__init__(x, y, w, h, x_dir, y_dir, "orange", win)
+        self.do_burst = do_burst
+        if not self.do_burst:
+            self.rect.draw(self.win)
+
+    def move(self):
+        if self.do_burst:
+            if self.bottom() < 0:
+                self.killTop()
+        else:
+            self.killSides()
+        super().move()
+
+    def killSides(self):
+        if self.right() < 0 or self.left() > self.win.getWidth() or self.bottom() < 0 or self.top() > self.win.getHeight():
+            super().kill()
+
+    def kill(self):
+        if self.do_burst:
+            x = self.cX()
+            y = self.top() - 10
+            Bullet.kill(self)
+            top_left = BombBurst(x, y, 4, 4, -4, -4, False, self.win)
+            top = BombBurst(x, y, 4, 4, 0, -4, False, self.win)
+            top_right = BombBurst(x, y, 4, 4, 4, -4, False, self.win)
+            left = BombBurst(x, y, 4, 4, -4, -0, False, self.win)
+            right = BombBurst(x, y, 4, 4, 4, 0, False, self.win)
+            bot_left = BombBurst(x, y, 4, 4, -4, 4, False, self.win)
+            bot_right = BombBurst(x, y, 4, 4, 4, 4, False, self.win)
+            return [top_left, top, top_right, left, right, bot_left, bot_right]
+        else:
+            Bullet.kill(self)
 

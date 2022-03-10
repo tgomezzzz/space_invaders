@@ -37,6 +37,7 @@ class ShieldBullet(Bullet):
 class Powerup(Bullet):
     def __init__(self, x, y, w, h, x_dir, y_dir, color, win):
         super().__init__(x, y, w, h, x_dir, y_dir, color, win)
+        self.rect.setWidth(4)
         self.rect.undraw()
 
     def move(self):
@@ -60,10 +61,12 @@ class Powerup(Bullet):
 class VerticalBurst(Powerup):
     def __init__(self, x, y, win):
         super().__init__(x, y, 8, 20, 0, -5, "cyan", win)
+        self.rect.setOutline("blue")
 
 class HorizontalBurst(Powerup):
     def __init__(self, x, y, x_dir, y_dir, do_burst, win):
         super().__init__(x, y, 8, 8, x_dir, y_dir, "light green", win)
+        self.rect.setOutline("green")
         self.do_burst = do_burst
         if not self.do_burst:
             self.rect.draw(self.win)
@@ -92,8 +95,10 @@ class HorizontalBurst(Powerup):
 class BombBurst(Powerup):
     def __init__(self, x, y, w, h, x_dir, y_dir, do_burst, win):
         super().__init__(x, y, w, h, x_dir, y_dir, "orange", win)
+        self.rect.setOutline("white")
         self.do_burst = do_burst
         if not self.do_burst:
+            self.rect.setWidth(2)
             self.rect.draw(self.win)
 
     def move(self):

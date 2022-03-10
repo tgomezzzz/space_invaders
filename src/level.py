@@ -24,6 +24,7 @@ class Level:
         self.mothership = None
 
     def run(self):
+
         while not self.finished:
             self.swarm.move()
             self.doMothership()
@@ -33,27 +34,21 @@ class Level:
 
             key = self.win.checkKey()
             serial_data = self.ser.readLine()
-            # print(serial_data)
-            serial_data = 3000
-            if key == "Left" or serial_data < 2010:
-                print("moving left")
-                self.player.moveLeft()
-            elif key == "Right" or serial_data > 4000:
-                self.player.moveRight()
-                print("moving right")
-            elif key == "space":
+            if key == "Left" or serial_data[1] != 0:
+                self.player.moveLeft(serial_data[1])
+            elif key == "Right" or serial_data[1] != 0:
+                self.player.moveRight(serial_data[1])
+            if key == "space" or serial_data[2] == 0:
                 bullet = self.player.shoot()
                 if bullet != None:
                     self.player_bullets.append(bullet)
-            elif key == "Return":
+            if key == "Return" or serial_data[0]:
                 if self.player.hasAbility():
                     self.player.addScore(200)
                     self.player_bullets.append(self.player.useAbility())
                     
 
             self.finished, self.player_won = self.checkAllCollisions()
-
-            update(60)
 
         if not self.player_won:    
             self.win_message.setText("Better luck next time!")

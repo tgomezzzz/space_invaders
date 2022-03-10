@@ -27,25 +27,29 @@ class Player(Entity):
         self.indicators = []
         self.ability = None
 
-    def moveLeft(self):
-        if self.left() - self.speed < 0:
+    def moveLeft(self, speed):
+        if speed == None:
+            speed = self.speed
+        if self.left() - speed < 0:
             return
-        self.moveShield(-self.speed)
-        self.moveAbility(-self.speed)
-        self.moveIndicators(-self.speed)
-        self.score_text.move(-self.speed, 0)
-        super().move(-self.speed, 0)
-        self.img.move(-self.speed, 0)
+        self.moveShield(-speed)
+        self.moveAbility(-speed)
+        self.moveIndicators(-speed)
+        self.score_text.move(-speed, 0)
+        super().move(-speed, 0)
+        self.img.move(-speed, 0)
 
-    def moveRight(self):
-        if self.right() + self.speed > self.win.getWidth():
+    def moveRight(self, speed):
+        if speed == None:
+            speed = self.speed
+        if self.right() + speed > self.win.getWidth():
             return
-        self.moveShield(self.speed)
-        self.moveAbility(self.speed)
-        self.moveIndicators(self.speed)
-        self.score_text.move(self.speed, 0)
-        super().move(self.speed, 0)
-        self.img.move(self.speed, 0)
+        self.moveShield(speed)
+        self.moveAbility(speed)
+        self.moveIndicators(speed)
+        self.score_text.move(speed, 0)
+        super().move(speed, 0)
+        self.img.move(speed, 0)
 
     def moveShield(self, d_x):
         if self.hasShield():
@@ -81,7 +85,7 @@ class Player(Entity):
                 self.addIndicator(alien)
             if self.powerup[1] >= POWERUP_KILLS:
                 self.setAbility(alien)
-        else:
+        elif not self.hasAbility():
             self.clearIndicators()
             self.powerup = [alien, 1]
             self.addIndicator(alien)
